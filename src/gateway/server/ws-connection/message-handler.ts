@@ -454,6 +454,11 @@ export function attachGatewayWsMessageHandler(params: {
           controlUiConfig: configSnapshot.gateway?.controlUi,
           deviceRaw,
         });
+        if (isControlUi && configSnapshot.gateway?.controlUi?.allowInsecureAuth === true) {
+          // Compatibility with local/dev flows: when explicitly enabled, do not enforce
+          // Control UI device-auth gating during connect.
+          controlUiAuthPolicy.allowBypass = true;
+        }
         const device = controlUiAuthPolicy.device;
 
         let {
